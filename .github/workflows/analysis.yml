@@ -8,15 +8,16 @@ jobs:
   deptrac:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout pull request
         uses: actions/checkout@v2
         with:
+          ref: ${{ github.event.pull_request.head.sha }}  # Check out the PR branch
           fetch-depth: 0  # Fetch all history for accurate diffing
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Adjust PHP version as needed
+          php-version: '8.0' # Adjust PHP version as needed
 
       - name: Install Dependencies
         run: |
@@ -29,7 +30,7 @@ jobs:
           echo "Base branch is: $BASE_BRANCH"
 
           # Check for changes in PHP files
-          files=$(git diff --name-only "$BASE_BRANCH"..."$GITHUB_SHA" -- '*.php')
+          files=$(git diff --name-only "$BASE_BRANCH" "$GITHUB_SHA" -- '*.php')
 
           # Output the list of changed files
           if [ -z "$files" ]; then
