@@ -24,8 +24,27 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-scripts
 
-      - name: Run Deptrac
+      - name: Get Changed PHP Files
+        id: changed_files
         run: |
-          echo "Contents of base:"
-          ls -la ./*
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Base branch is: $BASE_BRANCH"
+          
+          # Check for changes in PHP files
+          files=$(git diff --name-only "$BASE_BRANCH...HEAD" -- '*.php')
+          
+          # Output the list of changed files
+          if [ -z "$files" ]; then
+          echo "No PHP files changed."
+          echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
+          else
+          echo "Changed PHP files: $files"
+          echo "FILES=$files" >> $GITHUB_ENV # Set the changed files
+          fi
+  
+
+      - name: Run Deptrac
+        if: env.FILES != 'all'  # Run only if there are PHP file changes
+        run: |
+          echo "Running Deptrac analysis on changed PHP files..."
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml --paths="$FILES"
