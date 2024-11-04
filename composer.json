@@ -1,0 +1,21 @@
+{
+    "name": "shahzad/newsrc",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Shahzad Khan",
+            "email": "shahzad.khan@smoobu.com"
+        }
+    ],
+    "require": {
+        "symfony/orm-pack": "^2.4",
+        "doctrine/doctrine-bundle": "^2.13"
+    },
+    "require-dev": {
+        "qossmic/deptrac": "^2.0"
+    }
+}
