@@ -11,37 +11,45 @@ jobs:
       - name: Checkout pull request
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}  # Check out the PR branch
           fetch-depth: 0  # Fetch all history for accurate diffing
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2' # Adjust PHP version as needed
+          php-version: '8.2'  # Adjust PHP version as needed
 
       - name: Install Dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Get Changed PHP Files
+      - name: Get Changed and New PHP Files
         id: changed_files
         run: |
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
           echo "Base branch is: $BASE_BRANCH"
 
-          # Check for changes in PHP files
-          files=$(git diff --name-only "$BASE_BRANCH" "$GITHUB_SHA" -- '*.php')
+          # Get the commit SHA for the head of the pull request
+          PR_HEAD="${{ github.event.pull_request.head.sha }}"
 
-          # Output the list of changed files
-          if [ -z "$files" ]; then
-            echo "No PHP files changed."
+          # Get the list of changed PHP files across all commits in the pull request
+          changed_files=$(git diff --name-only "$BASE_BRANCH...$PR_HEAD" -- '*.php')
+          echo "Changed PHP files: $changed_files"
+
+          # Get the list of new PHP files added in the pull request
+          new_files=$(git diff --name-only --diff-filter=A "$BASE_BRANCH...$PR_HEAD" -- '*.php')
+          echo "New PHP files: $new_files"
+
+          # Combine changed and new files
+          if [ -z "$changed_files" ] && [ -z "$new_files" ]; then
+            echo "No PHP files changed or added."
             echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
           else
-            echo "Changed PHP files: $files"
-            echo "FILES=$files" >> $GITHUB_ENV # Set the changed files
+            combined_files=$(echo "$changed_files" "$new_files" | tr ' ' '\n' | sort -u)
+            echo "Combined PHP files for analysis: $combined_files"
+            echo "FILES=$combined_files" >> $GITHUB_ENV # Set the combined files
           fi
 
       - name: Run Deptrac Analysis
         run: |
-          echo "Running Deptrac analysis..."
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml
+          echo "Running Deptrac analysis on files: $FILES"
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml --paths="$FILES"
