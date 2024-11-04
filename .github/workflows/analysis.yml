@@ -15,6 +15,14 @@ jobs:
           fetch-depth: 0
 
 
+
+      - name: Fetch Base Branch
+        run: |
+          # Fetch the latest changes from the remote repository
+          git fetch origin
+          # Ensure we have the latest state of the base branch
+          git checkout ${{ github.event.pull_request.base.ref }}
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
