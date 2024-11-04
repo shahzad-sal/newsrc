@@ -1,50 +1,46 @@
-name: Static Analysis
+name: Deptrac Analysis
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
-    branches:
-      - main  # Change to your main branch if it's different
+    types: [opened, synchronize, reopened]
 
 jobs:
-  static-analysis:
+  deptrac:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Fetch all history for accurate diffing
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'  # Change to your PHP version
-          extensions: mbstring, xml, curl, pdo, pdo_mysql
-          ini-values: post_max_size=256M, upload_max_filesize=256M
+          php-version: '8.2' # Adjust PHP version as needed
 
-      - name: Install Composer dependencies
-        run: composer install --no-scripts
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Get Changed PHP Files
         id: changed_files
         run: |
           BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
           echo "Base branch is: $BASE_BRANCH"
-          
+
           # Check for changes in PHP files
-          files=$(git diff --name-only "$BASE_BRANCH...HEAD" -- '*.php')
-          
+          files=$(git diff --name-only "$BASE_BRANCH"..."$GITHUB_SHA" -- '*.php')
+
           # Output the list of changed files
           if [ -z "$files" ]; then
-          echo "No PHP files changed."
-          echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
+            echo "No PHP files changed."
+            echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
           else
-          echo "Changed PHP files: $files"
-          echo "FILES=$files" >> $GITHUB_ENV # Set the changed files
+            echo "Changed PHP files: $files"
+            echo "FILES=$files" >> $GITHUB_ENV # Set the changed files
           fi
-  
 
-      - name: Run Deptrac
-        if: env.FILES != 'all'  # Run only if there are PHP file changes
+      - name: Run Deptrac Analysis
         run: |
-          echo "Running Deptrac analysis on changed PHP files..."
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml --paths="$FILES"
+          echo "Running Deptrac analysis..."
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml
