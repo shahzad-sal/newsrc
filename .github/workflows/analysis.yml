@@ -28,4 +28,4 @@ jobs:
         run: |
           echo "Contents of base:"
           ls -la ./*
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yaml
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml
