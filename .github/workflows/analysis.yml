@@ -8,10 +8,12 @@ jobs:
   deptrac:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout pull request
-        uses: actions/checkout@v2
+      - name: Check out repository code
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for accurate diffing
+          show-progress: false
+          fetch-depth: 0
+
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
