@@ -21,6 +21,11 @@ jobs:
           # Ensure we have the latest state of the base branch
           git checkout ${{ github.event.pull_request.base.ref }}
 
+      - name: Checkout PR Branch
+        run: |
+          # Checkout the branch of the pull request
+          git checkout ${{ github.head_ref }}
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -63,5 +68,5 @@ jobs:
       - name: Run Deptrac Analysis
         run: |
           echo "Running Deptrac analysis on files: $FILES"
-          php ./DeptracConfigGenerator.php $FILES
+          php ./DeptracConfigGenerator.php $FILES  # Ensure this file exists and is executable
           php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yml
