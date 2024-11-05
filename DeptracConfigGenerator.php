@@ -57,7 +57,7 @@ class DeptracConfigGenerator
 
 $changedFiles = [];
 if (!empty($argv[1])) {
-    $changedFiles = explode("\n", $argv[1]);
+    $changedFiles = explode(" ", $argv[1]);
 }
 $generator = new DeptracConfigGenerator($changedFiles);
 $generator->generateConfig();
