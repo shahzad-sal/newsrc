@@ -10,6 +10,8 @@ class testEntity {
     public ArrayCollection $analytics;
 
 
+
+    
     public function test(){
         $test = new test();
     }
