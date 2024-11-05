@@ -1,35 +1,85 @@
 imports:
-  - deptrac.baseline.yaml
+  - deptrac.base.yaml
+  - deptrac.extended.layers.yaml
 
-ruleset:
-  Presentation:
-    - Application
-    - Domain
-    - External
-    - Infrastructure
-  Application:
-    - Domain
-    - External
-    - Infrastructure
-    - Presentation
-  Domain: ~
-  Infrastructure:
-    - Application
-    - Domain
-    - External
-    - Presentation
-  External: ~
+deptrac:
+  layers:
+    - name: OldPresentation
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Presentation/.*'
+          must_not:
+            - type: layer
+              value: Presentation
 
-  # new rule
-  newApplicationFiles:
-    - Domain
+    - name: OldApplication
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Application/.*'
+          must_not:
+            - type: layer
+              value: Application
 
-  NeePresentationFiles:
-    - Application
-    - Domain
-    - External
+    - name: OldDomain
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Domain/.*'
+          must_not:
+            - type: layer
+              value: Domain
 
-  NewInfrastructureFiles:
-    - Application
-    - Domain
-    - External
+    - name: OldInfrastructure
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Infrastructure/.*'
+          must_not:
+            - type: layer
+              value: Infrastructure
+
+  ruleset:
+    OldPresentation:
+      - OldApplication
+      - OldDomain
+      - OldExternal
+      - OldInfrastructure
+    OldApplication:
+      - OldDomain
+      - OldExternal
+      - OldInfrastructure
+      - OldPresentation
+      - Domain
+    OldDomain:
+      - OldApplication
+      - OldDomain
+      - External
+      - OldInfrastructure
+    OldInfrastructure:
+      - OldApplication
+      - OldDomain
+      - External
+      - OldPresentation
+    External: ~
+    Application:
+      - OldDomain
+      - Domain
+    Presentation:
+      - OldApplication
+      - Application
+      - OldDomain
+      - Domain
+      - External
+    Domain: ~
+    Infrastructure:
+      - OldApplication
+      - OldDomain
+      - Domain
+      - Application
+      - External

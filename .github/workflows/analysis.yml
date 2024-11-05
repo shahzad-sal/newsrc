@@ -14,8 +14,6 @@ jobs:
           show-progress: false
           fetch-depth: 0
 
-
-
       - name: Fetch Base Branch
         run: |
           # Fetch the latest changes from the remote repository
@@ -62,4 +60,5 @@ jobs:
       - name: Run Deptrac Analysis
         run: |
           echo "Running Deptrac analysis on files: $FILES"
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.yml --paths="$FILES"
+          php DeptracConfigGenerator.php $FILES
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yml

@@ -1,17 +1,22 @@
-imports:
-  - deptrac.base.yaml
-  - deptrac.extended.layers.yaml
+---
 deptrac:
-  ruleset:
-    Presentation:
-      - Application
-      - Domain
-      - External
-    Application:
-      - Domain
-    Domain: ~
-    Infrastructure:
-      - Application
-      - Domain
-      - External
-    External: ~
+  layers:
+  - name: Domain
+    collectors:
+    - type: class
+      value: ^Domain\\Admin\\AdminEntity.*$
+    - type: class
+      value: ^Domain\\testEntity.*$
+  - name: Application
+    collectors:
+    - type: class
+      value: ^Application\\Niayi.*$
+  - name: Infrastructure
+    collectors:
+    - type: class
+      value: ^$
+  - name: Presentation
+    collectors:
+    - type: class
+      value: ^$
+...

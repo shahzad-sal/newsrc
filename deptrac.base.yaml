@@ -4,32 +4,6 @@ deptrac:
     - ./vendor/doctrine/orm/src/Mapping
 
   layers:
-
-    - name: Presentation
-      collectors:
-        - type: bool
-          must:
-          - type: directory
-            value: 'src/Presentation/.*'
-          must_not:
-            - type: layer
-              value: NewPresentationFiles
-
-    - name: Application
-      collectors:
-        - type: bool
-          must:
-            - type: directory
-              value: 'src/Application/.*'
-          must_not:
-            - type: layer
-              value: newApplicationFiles
-
-    - name: Domain
-      collectors:
-        - type: class
-          value: '.*Domain\\testEntity.*'
-
     - name: External
       collectors:
         - type: bool
@@ -41,13 +15,3 @@ deptrac:
           must:
             - type: classLike
               value: '[\\]+'
-
-    - name: Infrastructure
-      collectors:
-        - type: bool
-          must:
-            - type: directory
-              value: 'src/Infrastructure/.*'
-          must_not:
-            - type: layer
-              value: 'newInfrastructureFiles'

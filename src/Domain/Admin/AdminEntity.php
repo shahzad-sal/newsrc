@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Admin;
 
-
-
 use Application\test;
 use Doctrine\Common\Collections\ArrayCollection;
 class AdminEntity {
