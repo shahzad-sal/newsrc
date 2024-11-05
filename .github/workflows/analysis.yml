@@ -52,7 +52,7 @@ jobs:
             echo "No PHP files changed or added."
             echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
           else
-            combined_files=$(echo "$changed_files" "$new_files" | tr ' ' '\n' | sort -u)
+            combined_files=$(echo "$changed_files" "$new_files" | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ *$//')
             echo "Combined PHP files for analysis: $combined_files"
             echo "FILES=$combined_files" >> $GITHUB_ENV # Set the combined files
           fi
