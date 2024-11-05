@@ -57,8 +57,11 @@ jobs:
             echo "FILES=$combined_files" >> $GITHUB_ENV # Set the combined files
           fi
 
+      - name: List files in the working directory
+        run: ls -la
+
       - name: Run Deptrac Analysis
         run: |
-          echo "Running Deptrac analysis on files: $FILES"
-          php DeptracConfigGenerator.php $FILES
+           echo "Running Deptrac analysis on files: $FILES"
+          php ./DeptracConfigGenerator.php $FILES
           php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yml

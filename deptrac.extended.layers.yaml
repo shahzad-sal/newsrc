@@ -4,13 +4,11 @@ deptrac:
   - name: Domain
     collectors:
     - type: class
-      value: ^Domain\\Admin\\AdminEntity.*$
-    - type: class
-      value: ^Domain\\testEntity.*$
+      value: ^$
   - name: Application
     collectors:
     - type: class
-      value: ^Application\\Niayi.*$
+      value: ^$
   - name: Infrastructure
     collectors:
     - type: class
