@@ -13,7 +13,8 @@
     ],
     "require": {
         "symfony/orm-pack": "^2.4",
-        "doctrine/doctrine-bundle": "^2.13"
+        "doctrine/doctrine-bundle": "^2.13",
+        "larapack/dd": "^1.1"
     },
     "require-dev": {
         "qossmic/deptrac": "^2.0"

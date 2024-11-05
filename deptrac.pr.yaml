@@ -1,0 +1,85 @@
+imports:
+  - deptrac.base.yaml
+  - deptrac.extended.layers.yaml
+
+deptrac:
+  layers:
+    - name: OldPresentation
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Presentation/.*'
+          must_not:
+            - type: layer
+              value: Presentation
+
+    - name: OldApplication
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Application/.*'
+          must_not:
+            - type: layer
+              value: Application
+
+    - name: OldDomain
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Domain/.*'
+          must_not:
+            - type: layer
+              value: Domain
+
+    - name: OldInfrastructure
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Infrastructure/.*'
+          must_not:
+            - type: layer
+              value: Infrastructure
+
+  ruleset:
+    OldPresentation:
+      - OldApplication
+      - OldDomain
+      - OldExternal
+      - OldInfrastructure
+    OldApplication:
+      - OldDomain
+      - OldExternal
+      - OldInfrastructure
+      - OldPresentation
+      - Domain
+    OldDomain:
+      - OldApplication
+      - OldDomain
+      - External
+      - OldInfrastructure
+    OldInfrastructure:
+      - OldApplication
+      - OldDomain
+      - External
+      - OldPresentation
+    External: ~
+    Application:
+      - OldDomain
+      - Domain
+    Presentation:
+      - OldApplication
+      - Application
+      - OldDomain
+      - Domain
+      - External
+    Domain: ~
+    Infrastructure:
+      - OldApplication
+      - OldDomain
+      - Domain
+      - Application
+      - External

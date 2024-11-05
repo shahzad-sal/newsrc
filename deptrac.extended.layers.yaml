@@ -1,0 +1,20 @@
+---
+deptrac:
+  layers:
+  - name: Domain
+    collectors:
+    - type: class
+      value: ^$
+  - name: Application
+    collectors:
+    - type: class
+      value: ^$
+  - name: Infrastructure
+    collectors:
+    - type: class
+      value: ^$
+  - name: Presentation
+    collectors:
+    - type: class
+      value: ^$
+...

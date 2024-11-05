@@ -1,28 +1,72 @@
-name: Static Analysis
+name: Deptrac Analysis
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
-    branches:
-      - main  # Change to your main branch if it's different
+    types: [opened, synchronize, reopened]
 
 jobs:
-  static-analysis:
+  deptrac:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+          fetch-depth: 0
+
+      - name: Fetch Base Branch
+        run: |
+          # Fetch the latest changes from the remote repository
+          git fetch origin
+          # Ensure we have the latest state of the base branch
+          git checkout ${{ github.event.pull_request.base.ref }}
+
+      - name: Checkout PR Branch
+        run: |
+          # Checkout the branch of the pull request
+          git checkout ${{ github.head_ref }}
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Change to your PHP version
-          extensions: mbstring, xml, curl, pdo, pdo_mysql
-          ini-values: post_max_size=256M, upload_max_filesize=256M
+          php-version: '8.2'  # Adjust PHP version as needed
 
-      - name: Install Composer dependencies
-        run: composer install --no-scripts
+      - name: Install Dependencies
+        run: |
+          composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Run Deptrac
-        run: vendor/bin/deptrac analyse
+      - name: Get Changed and New PHP Files
+        id: changed_files
+        run: |
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Base branch is: $BASE_BRANCH"
+
+          # Get the commit SHA for the head of the pull request
+          PR_HEAD="${{ github.event.pull_request.head.sha }}"
+
+          # Get the list of changed PHP files across all commits in the pull request
+          changed_files=$(git diff --name-only "$BASE_BRANCH...$PR_HEAD" -- '*.php')
+          echo "Changed PHP files: $changed_files"
+
+          # Get the list of new PHP files added in the pull request
+          new_files=$(git diff --name-only --diff-filter=A "$BASE_BRANCH...$PR_HEAD" -- '*.php')
+          echo "New PHP files: $new_files"
+
+          # Combine changed and new files
+          if [ -z "$changed_files" ] && [ -z "$new_files" ]; then
+            echo "No PHP files changed or added."
+            echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
+          else
+            combined_files=$(echo "$changed_files" "$new_files" | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ *$//')
+            echo "Combined PHP files for analysis: $combined_files"
+            echo "FILES=$combined_files" >> $GITHUB_ENV # Set the combined files
+          fi
+
+      - name: List files in the working directory
+        run: ls -la
+
+      - name: Run Deptrac Analysis
+        run: |
+          echo "Running Deptrac analysis on files: $FILES"
+          php ./DeptracConfigGenerator.php "$FILES"  # Ensure this file exists and is executable
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yaml

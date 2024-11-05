@@ -1,22 +1,31 @@
+
 deptrac:
   paths:
     - ./src
     - ./vendor/doctrine/orm/src/Mapping
 
-
   layers:
     - name: Presentation
       collectors:
-        - type: directory
-          value: 'src/Presentation/.*'
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Presentation/.*'
+
     - name: Application
       collectors:
-        - type: directory
-          value: 'src/Application/.*'
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Application/.*'
+
     - name: Domain
       collectors:
-        - type: directory
-          value: 'src/Domain/.*'
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Domain/.*'
+
     - name: External
       collectors:
         - type: bool
@@ -31,8 +40,11 @@ deptrac:
 
     - name: Infrastructure
       collectors:
-        - type: directory
-          value: 'src/Infrastructure/.*'
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Infrastructure/.*'
+
   ruleset:
     Presentation:
       - Application

@@ -1,0 +1,17 @@
+deptrac:
+  paths:
+    - ./src
+    - ./vendor/doctrine/orm/src/Mapping
+
+  layers:
+    - name: External
+      collectors:
+        - type: bool
+          must_not:
+            - type: directory
+              value: 'src/*'
+            - type: implements
+              value: 'Doctrine\ORM\Mapping\MappingAttribute'
+          must:
+            - type: classLike
+              value: '[\\]+'
