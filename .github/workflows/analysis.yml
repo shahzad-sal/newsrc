@@ -69,4 +69,4 @@ jobs:
         run: |
           echo "Running Deptrac analysis on files: $FILES"
           php ./DeptracConfigGenerator.php $FILES  # Ensure this file exists and is executable
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yml
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yaml
