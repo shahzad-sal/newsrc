@@ -1,0 +1,101 @@
+deptrac:
+  paths:
+    - ./src
+    - ./vendor/doctrine/orm/src/Mapping
+
+  layers:
+    - name: NewPresentationFiles
+      collectors:
+        - type: class
+          value: '.*Presentation\\testEntity.*'
+
+    - name: Presentation
+      collectors:
+        - type: bool
+          must:
+          - type: directory
+            value: 'src/Presentation/.*'
+          must_not:
+            - type: layer
+              value: NewPresentationFiles
+
+    - name: newApplicationFiles
+      collectors:
+        - type: class
+          value: '^$'
+
+    - name: Application
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Application/.*'
+          must_not:
+            - type: layer
+              value: newApplicationFiles
+
+    - name: Domain
+      collectors:
+        - type: class
+          value: '.*Domain\\testEntity.*'
+
+    - name: External
+      collectors:
+        - type: bool
+          must_not:
+            - type: directory
+              value: 'src/*'
+            - type: implements
+              value: 'Doctrine\ORM\Mapping\MappingAttribute'
+          must:
+            - type: classLike
+              value: '[\\]+'
+
+    - name: NewInfrastructureFiles
+      collectors:
+        - type: class
+          value: '.*Infrastructure\\testEntity.*'
+
+    - name: Infrastructure
+      collectors:
+        - type: bool
+          must:
+            - type: directory
+              value: 'src/Infrastructure/.*'
+          must_not:
+            - type: layer
+              value: 'newInfrastructureFiles'
+
+
+  ruleset:
+    Presentation:
+      - Application
+      - Domain
+      - External
+      - Infrastructure
+    Application:
+      - Domain
+      - External
+      - Infrastructure
+      - Presentation
+    Domain: ~
+    Infrastructure:
+      - Application
+      - Domain
+      - External
+      - Presentation
+    External: ~
+
+    # new rule
+    newApplicationFiles:
+      - Domain
+
+    NeePresentationFiles:
+      - Application
+      - Domain
+      - External
+
+    NewInfrastructureFiles:
+      - Application
+      - Domain
+      - External

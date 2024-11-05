@@ -1,0 +1,17 @@
+imports:
+  - deptrac.base.yaml
+  - deptrac.extended.layers.yaml
+deptrac:
+  ruleset:
+    Presentation:
+      - Application
+      - Domain
+      - External
+    Application:
+      - Domain
+    Domain: ~
+    Infrastructure:
+      - Application
+      - Domain
+      - External
+    External: ~

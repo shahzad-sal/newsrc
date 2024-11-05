@@ -1,0 +1,35 @@
+imports:
+  - deptrac.baseline.yaml
+
+ruleset:
+  Presentation:
+    - Application
+    - Domain
+    - External
+    - Infrastructure
+  Application:
+    - Domain
+    - External
+    - Infrastructure
+    - Presentation
+  Domain: ~
+  Infrastructure:
+    - Application
+    - Domain
+    - External
+    - Presentation
+  External: ~
+
+  # new rule
+  newApplicationFiles:
+    - Domain
+
+  NeePresentationFiles:
+    - Application
+    - Domain
+    - External
+
+  NewInfrastructureFiles:
+    - Application
+    - Domain
+    - External
