@@ -9,9 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 class testEntity {
     public ArrayCollection $analytics;
 
-
-
-    
     public function test(){
         $test = new test();
     }
