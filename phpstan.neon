@@ -1,0 +1,35 @@
+parameters:
+    level: 5
+    paths:
+        - src
+    excludePaths:
+        - Smoobu/*
+        - module/*
+
+    ignoreErrors:
+        -
+            message: '#Class [a-zA-Z0-9\\_]+ has an uninitialized readonly property \$[a-zA-Z0-9]+. Assign it in the constructor.#'
+            paths:
+                - src/Domain/*/Action/*
+                - src/Presentation/Api/Rest/*
+        -
+            message: '#Readonly property [a-zA-Z0-9\\_]+::\$[a-zA-Z0-9]+ is assigned outside of the constructor.#'
+            paths:
+                - src/Domain/*/Action/*
+                - src/Presentation/Api/Rest/*
+        -
+            message: "#^Call to an undefined method ReflectionEnum\\:\\:getBackingType\\(\\)\\.$#"
+            count: 1
+            path: src/Infrastructure/Validator/Request/ValidationRulesFactory.php
+        -
+            message: "#^Call to an undefined method ReflectionEnum\\:\\:isBacked\\(\\)\\.$#"
+            count: 1
+            path: src/Infrastructure/Validator/Request/ValidationRulesFactory.php
+        -
+            message: "#^Constructor of class Infrastructure\\\\OpenApi\\\\Attributes\\\\Get has an unused parameter \\$refContentType\\.$#"
+            count: 1
+            path: src/Infrastructure/OpenApi/Attributes/Get.php
+        -
+            message: "#^Access to property \\$risk on an unknown class Castle_(Log|Risk)\\.$#"
+            count: 7
+            path: src/Infrastructure/Castleio/CastleioAPIClient.php
