@@ -60,3 +60,10 @@ deptrac:
       - Domain
       - External
     External: ~
+
+  formatters:
+    codeclimate:
+      severity:
+        failure: blocker
+        skipped: minor
+        uncovered: info

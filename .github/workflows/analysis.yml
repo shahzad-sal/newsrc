@@ -35,6 +35,14 @@ jobs:
         run: |
           php CodeSnifferToSonarCloud.php
 
+      - name: Run DepTrac Analysis
+        run: |
+          php -d memory_limit=512M ./vendor/bin/deptrac --formatter=codeclimate | jq -c . | tee -a deptrac.json
+
+      - name: DepTrac format to SonarClound
+        run: |
+          php DepTracToSonarCloud.php
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

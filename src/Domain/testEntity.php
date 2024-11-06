@@ -6,7 +6,6 @@ namespace Domain;
 
 use Application\Niayi;
 use Application\test;
-use Doctrine\Common\Collections\ArrayCollection;
 class testEntity {
     public ArrayCollection $analytics;
 
