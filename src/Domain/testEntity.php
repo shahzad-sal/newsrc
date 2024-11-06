@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Domain;
 
+use Application\Niayi;
 use Application\test;
 use Doctrine\Common\Collections\ArrayCollection;
 class testEntity {
@@ -11,6 +12,10 @@ class testEntity {
 
     public function test(){
         $test = new test();
+    }
+
+    public function needToBeTested(){
+        $test = new Niayi();
     }
 
 }
