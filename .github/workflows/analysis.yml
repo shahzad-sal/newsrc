@@ -30,4 +30,10 @@ jobs:
       - name: Run Deptrac Analysis
         run: |
           echo "Running Deptrac analysis on files: $FILES"
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --formatter=json
+          php -d memory_limit=512M ./vendor/bin/deptrac analyze --formatter=json | tee -a codesniffer.json
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
