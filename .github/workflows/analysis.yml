@@ -27,10 +27,13 @@ jobs:
       - name: List files in the working directory
         run: ls -la
 
-      - name: Run Deptrac Analysis
+      - name: Run phpcs Analysis
         run: |
-          echo "Running Deptrac analysis on files: $FILES"
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --formatter=json | tee -a codesniffer.json
+          php -d memory_limit=512M ./vendor/bin/phpcs --report=json --exclude=Generic.Files.LineLength | tee -a codesniffer.json
+
+      - name: Codesniffer format to SonarCloud
+        run: |
+          php CodeSnifferToSonarCloud.php
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master

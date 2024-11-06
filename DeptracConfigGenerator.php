@@ -1,9 +1,6 @@
 <?php
 declare(strict_types=1);
 
-require 'vendor/autoload.php';
-
-
 class DeptracConfigGenerator
 {
     private const DOMAINS = [
@@ -21,6 +18,7 @@ class DeptracConfigGenerator
 
     public function generateConfig(): void
     {
+        die('DeptracConfigGenerator');
         foreach (self::DOMAINS as $domain) {
             $collectors = [];
             if (!empty($this->changedFiles)) {
@@ -54,6 +52,7 @@ class DeptracConfigGenerator
     }
 }
 
+die('DeptracConfigGenerator');
 
 $changedFiles = [];
 if (!empty($argv[1])) {
