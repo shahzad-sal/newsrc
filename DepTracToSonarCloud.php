@@ -42,7 +42,7 @@ class DepTracToSonarCloud
                     $sonarCloudIssues[] = [
                         'engineId' => 'DepTrac',
                         'ruleId' => $issue['check_name'],
-                        'severity' => strtoupper($issue['severity']),
+                        'severity' => $this->getSeverity($issue['severity']),
                         'type' => 'CODE_SMELL',
                         'primaryLocation' => [
                             "message" => $issue['description'],
@@ -55,6 +55,16 @@ class DepTracToSonarCloud
         }
 
         return $sonarCloudIssues;
+    }
+
+    private function getSeverity(string $severity): string
+    {
+        return match ($severity) {
+            'minor' => 'MINOR',
+            'blocker' => 'BLOCKER',
+            'major' => 'MAJOR',
+            default => 'INFO',
+        };
     }
 
     private function saveIssuesToJsonFile(array $issues): void
