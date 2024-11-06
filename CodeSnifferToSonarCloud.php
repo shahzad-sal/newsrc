@@ -28,8 +28,10 @@ class CodeSnifferToSonarCloud
                 echo 'Saved Codesniffer issues to SonarCloud format' . PHP_EOL;
             }
 
+
             $this->saveIssuesToJsonFile(['issues' => $issues]);
         } catch (Throwable $e) {
+            echo $e->getMessage();
             echo 'No codesniffer report';
         }
     }
