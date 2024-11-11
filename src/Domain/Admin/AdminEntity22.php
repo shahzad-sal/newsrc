@@ -7,7 +7,7 @@ namespace Domain\Admin;
 class AdminEntity22 {
     public array $analytics;
 
-    public fuction __construct() {
+    public function __construct() {
         $this->analytics = [];
         $test = 'testf asdf asdf afds ' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test'&& 'test' && 'test';
     }
