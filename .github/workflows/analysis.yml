@@ -27,6 +27,10 @@ jobs:
       - name: List files in the working directory
         run: ls -la
 
+      - name: Run PHPStan analysis and capture output
+        id: phpstan
+        run:  ./vendor/bin/phpstan | tee -a phpstan-report.json
+
       - name: Run phpcs Analysis
         run: |
           php -d memory_limit=512M ./vendor/bin/phpcs --report=json --exclude=Generic.Files.LineLength | tee -a codesniffer.json
