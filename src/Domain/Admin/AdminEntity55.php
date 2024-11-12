@@ -16,7 +16,7 @@ class AdminEntity55
         $test = 'testf asdf asdf afds ' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test';
     }
 
-    public function aliniayi()
+    public function aliniayi(): int
     {
         $this->analytics = [
             'name' => 'test',
@@ -25,5 +25,6 @@ class AdminEntity55
 
 
         $new = new nina(
+
     }
 }
