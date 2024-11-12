@@ -6,12 +6,14 @@ namespace Application;
 
 use Domain\testEntity;
 
-class test {
-    public function __construct() {
-
+class Test
+{
+    public function __construct()
+    {
     }
 
-    public function test() {
+    public function test()
+    {
         $test = new testEntity();
         $test->analytics;
     }

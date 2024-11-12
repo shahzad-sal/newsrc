@@ -6,21 +6,24 @@ namespace Domain\Admin;
 
 use Application\Niayi as nina;
 
-class AdminEntity55 {
+class AdminEntity55
+{
     public array $analytics;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->analytics = [];
-        $test = 'testf asdf asdf afds ' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test'&& 'test' && 'test';
+        $test = 'testf asdf asdf afds ' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test';
     }
 
-    public function aliniayi() {
+    public function aliniayi()
+    {
         $this->analytics = [
             'name' => 'test',
             'value' => 1,
         ];
 
 
-        $new = new nina();
+        $new = new nina(
     }
 }

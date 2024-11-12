@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Domain;
 
-class testEntity {
+class TestEntity
+{
     public array $analytics;
-
-
-
 }
