@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Domain\Admin;
 
-use Application\Niayi;
-
 class AdminEntity {
     public array $analytics;
 
@@ -14,6 +12,5 @@ class AdminEntity {
             'name' => 'test',
             'value' => 1,
         ];
-        $test = new Niayi();
     }
 }
