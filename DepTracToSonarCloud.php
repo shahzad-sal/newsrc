@@ -43,7 +43,7 @@ class DepTracToSonarCloud
                         'engineId' => 'DepTrac',
                         'ruleId' => $issue['check_name'],
                         'severity' => $this->getSeverity($issue['severity']),
-                        'type' => 'CODE_SMELL',
+                        'type' => 'VULNERABILITY',
                         'primaryLocation' => [
                             "message" => $issue['description'],
                             "filePath" => str_replace(getcwd() . '/', '', $issue['location']['path']),
