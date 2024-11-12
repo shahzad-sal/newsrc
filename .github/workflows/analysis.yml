@@ -14,59 +14,41 @@ jobs:
           show-progress: false
           fetch-depth: 0
 
-      - name: Fetch Base Branch
-        run: |
-          # Fetch the latest changes from the remote repository
-          git fetch origin
-          # Ensure we have the latest state of the base branch
-          git checkout ${{ github.event.pull_request.base.ref }}
-
-      - name: Checkout PR Branch
-        run: |
-          # Checkout the branch of the pull request
-          git checkout ${{ github.head_ref }}
-
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'  # Adjust PHP version as needed
 
+
       - name: Install Dependencies
         run: |
           composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Get Changed and New PHP Files
-        id: changed_files
-        run: |
-          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
-          echo "Base branch is: $BASE_BRANCH"
-
-          # Get the commit SHA for the head of the pull request
-          PR_HEAD="${{ github.event.pull_request.head.sha }}"
-
-          # Get the list of changed PHP files across all commits in the pull request
-          changed_files=$(git diff --name-only "$BASE_BRANCH...$PR_HEAD" -- '*.php')
-          echo "Changed PHP files: $changed_files"
-
-          # Get the list of new PHP files added in the pull request
-          new_files=$(git diff --name-only --diff-filter=A "$BASE_BRANCH...$PR_HEAD" -- '*.php')
-          echo "New PHP files: $new_files"
-
-          # Combine changed and new files
-          if [ -z "$changed_files" ] && [ -z "$new_files" ]; then
-            echo "No PHP files changed or added."
-            echo "FILES=all" >> $GITHUB_ENV # Set to all if no files
-          else
-            combined_files=$(echo "$changed_files" "$new_files" | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ *$//')
-            echo "Combined PHP files for analysis: $combined_files"
-            echo "FILES=$combined_files" >> $GITHUB_ENV # Set the combined files
-          fi
-
       - name: List files in the working directory
         run: ls -la
 
-      - name: Run Deptrac Analysis
+      - name: Run PHPStan analysis and capture output
+        id: phpstan
+        run:  php -d memory_limit=512M ./vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --no-ansi --error-format="json" | tee -a phpstan-report.json
+
+      - name: Run phpcs Analysis
         run: |
-          echo "Running Deptrac analysis on files: $FILES"
-          php ./DeptracConfigGenerator.php "$FILES"  # Ensure this file exists and is executable
-          php -d memory_limit=512M ./vendor/bin/deptrac analyze --config-file=deptrac.pr.yaml
+          php -d memory_limit=512M ./vendor/bin/phpcs --report=json --exclude=Generic.Files.LineLength | tee -a codesniffer.json
+
+      - name: Codesniffer format to SonarCloud
+        run: |
+          php CodeSnifferToSonarCloud.php
+
+      - name: Run DepTrac Analysis
+        run: |
+          php -d memory_limit=512M ./vendor/bin/deptrac --formatter=codeclimate | jq -c . | tee -a deptrac.json
+
+      - name: DepTrac format to SonarClound
+        run: |
+          php DepTracToSonarCloud.php
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

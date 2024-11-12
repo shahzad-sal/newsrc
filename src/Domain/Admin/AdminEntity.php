@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Domain\Admin;
 
-use Application\test;
-use Doctrine\Common\Collections\ArrayCollection;
 class AdminEntity {
-    public ArrayCollection $analytics;
+    public array $analytics;
 
-
-    public function test(){
-        $test = new test();
+    public function test(): void {
+        $this->analytics = [
+            'name' => 'test',
+            'value' => 1,
+        ];
     }
-
 }

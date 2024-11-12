@@ -1,3 +1,5 @@
+imports:
+  - deptrac.baseline.yaml
 
 deptrac:
   paths:
@@ -58,3 +60,10 @@ deptrac:
       - Domain
       - External
     External: ~
+
+  formatters:
+    codeclimate:
+      severity:
+        failure: blocker
+        skipped: minor
+        uncovered: info

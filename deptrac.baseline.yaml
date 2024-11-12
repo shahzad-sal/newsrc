@@ -1,0 +1,10 @@
+deptrac:
+  skip_violations:
+    Domain\Admin\AdminEntity:
+      - Application\test
+      - Doctrine\Common\Collections\ArrayCollection
+    Domain\entity22:
+      - Doctrine\Common\Collections\ArrayCollection
+    Domain\testEntity:
+      - Application\test
+      - Doctrine\Common\Collections\ArrayCollection
