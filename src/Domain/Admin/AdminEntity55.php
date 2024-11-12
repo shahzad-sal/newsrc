@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Domain\Admin;
 
-use Application\Niayi;
+use Application\Niayi as nina;
 
 class AdminEntity55 {
     public array $analytics;
@@ -20,6 +20,7 @@ class AdminEntity55 {
             'value' => 1,
         ];
 
-        $new = new Niayi();
+
+        $new = new nina();
     }
 }
