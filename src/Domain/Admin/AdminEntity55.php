@@ -20,6 +20,6 @@ class AdminEntity55 {
             'value' => 1,
         ];
 
-        $new = new Niayi()
+        $new = new Niayi();
     }
 }
