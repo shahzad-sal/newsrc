@@ -1,11 +1,8 @@
 <?php
 
-
 namespace Domain;
 
-class entity22 {
+class Entity22
+{
     public array $analytics;
-
-
-
 }

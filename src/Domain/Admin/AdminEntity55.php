@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Domain\Admin;
 
-use Application\Niayi;
+use Application\Niayi as nina;
 
-class AdminEntity22
+class AdminEntity55
 {
     public array $analytics;
 
@@ -16,12 +16,15 @@ class AdminEntity22
         $test = 'testf asdf asdf afds ' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test' && 'test';
     }
 
-    public function test22()
+    public function aliniayi(): int
     {
         $this->analytics = [
             'name' => 'test',
             'value' => 1,
         ];
-        $test = new Niayi();
+
+
+        $new = new nina();
+
     }
 }
