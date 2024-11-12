@@ -24,7 +24,7 @@ class AdminEntity55
         ];
 
 
-        $new = new nina(
+        $new = new nina();
 
     }
 }
