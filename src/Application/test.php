@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Application;
 
-use Domain\testEntity;
 
 class Test
 {
@@ -14,7 +13,6 @@ class Test
 
     public function test()
     {
-        $test = new testEntity();
         $test->analytics;
     }
 }

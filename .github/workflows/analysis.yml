@@ -29,7 +29,7 @@ jobs:
 
       - name: Run PHPStan analysis and capture output
         id: phpstan
-        run:  php -d memory_limit=512M ./vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --no-ansi --error-format="json" | tee -a phpstan-report.json
+          run:  php -d memory_limit=512M ./vendor/bin/phpstan analyse --configuration=phpstan.neon --no-progress --no-ansi --error-format="json" | tee -a phpstan-report.json
 
       - name: Run phpcs Analysis
         run: |
@@ -41,7 +41,7 @@ jobs:
 
       - name: Run DepTrac Analysis
         run: |
-          php -d memory_limit=512M ./vendor/bin/deptrac --formatter=codeclimate | tee -a deptrac.json
+          php -d memory_limit=512M ./vendor/bin/deptrac --formatter=json | tee -a deptrac.json
 
       - name: DepTrac format to SonarClound
         run: |
